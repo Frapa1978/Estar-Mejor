@@ -1,12 +1,11 @@
 const CACHE_NAME = 'estar-mejor-v1';
 
 // LISTA ACTUALIZADA PARA GITHUB PAGES
-const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icons/icon-192x192.png',
-  './icons/icon-512x512.png'
+const ASSETS_TO_CACHE = ['/',
+  '/index.html',
+  '/manifest.json',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
 ];
 
 // 1. Instalación
