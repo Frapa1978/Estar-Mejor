@@ -27,6 +27,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
+            console.log('Borrando caché antiguo:', cache);
             return caches.delete(cache);
           }
         })
@@ -51,9 +52,10 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       }).catch(() => {
-        // Si falla la red, intenta devolver la raíz del repo
+        // CAMBIO CRÍTICO AQUÍ:
+        // Si falla la red, devuelve el index.html relativo al proyecto
         if (event.request.mode === 'navigate') {
-          return caches.match('/Estar-Mejor/');
+          return caches.match('./index.html');
         }
       });
 
