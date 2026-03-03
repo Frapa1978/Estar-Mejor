@@ -3,6 +3,7 @@ import { createServer as createViteServer } from "vite";
 import { createClient } from "@supabase/supabase-js";
 import path from "path";
 import dotenv from "dotenv";
+import fs from "fs";
 
 dotenv.config();
 
@@ -188,10 +189,14 @@ async function startServer() {
     }
   });
 
-  console.log(`Starting server in ${process.env.NODE_ENV || 'development'} mode...`);
+  const isProd = process.env.NODE_ENV === "production" || await fs.promises.access(path.join(process.cwd(), "dist/index.html")).then(() => true).catch(() => false);
+  
+  console.log(`Starting server. Mode: ${isProd ? 'production' : 'development'}`);
+  console.log(`Current working directory: ${process.cwd()}`);
 
   // Vite middleware for development
-  if (process.env.NODE_ENV !== "production") {
+  if (!isProd) {
+    console.log("Attempting to mount Vite middleware...");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
@@ -200,11 +205,11 @@ async function startServer() {
     console.log("Vite middleware mounted.");
   } else {
     const distPath = path.join(process.cwd(), "dist");
+    console.log(`Serving static files from: ${distPath}`);
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
-    console.log(`Serving static files from ${distPath}`);
   }
 
   app.listen(PORT, "0.0.0.0", () => {

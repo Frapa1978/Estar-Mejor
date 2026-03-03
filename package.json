@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "cap:sync": "npx cap sync"
+    "cap:sync": "npx cap sync",
+    "start": "node server.ts"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",
